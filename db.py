@@ -39,3 +39,14 @@ def create_schema(conn, cursor):
         '''
     cursor.execute(sql)
     conn.commit()
+
+def insert_to_db(conn, cursor, interfaces, port_channels):
+    sql = ''' insert into port_channel (id,number,mode) values (%s,%s,%s) on conflict do nothing; '''
+    variables = [tuple(port_channel.values()) for port_channel in port_channels]
+    cursor.executemany(sql, variables)
+
+    sql = ''' insert into interface (name,config,description,max_frame_size,port_channel_id) values (%s,%s,%s,%s,%s) on conflict do nothing; '''
+    variables = [tuple(interface.values()) for interface in interfaces]
+    cursor.executemany(sql, variables)
+
+    conn.commit()
