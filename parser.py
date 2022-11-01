@@ -1,11 +1,6 @@
 import json
 from db import start_connection, close_connection, insert_to_db
-
-allowed_interfaces = [
-    'Port-channel',
-    'TenGigabitEthernet',
-    'GigabitEthernet'
-]
+from constants import ALLOWED_INTERFACES
 
 
 def insert_from_json(data_path):
@@ -20,7 +15,7 @@ def insert_from_json(data_path):
         interfaces = []
         raw_interfaces = data['frinx-uniconfig-topology:configuration']['Cisco-IOS-XE-native:native']['interface']
         for key, interface_group in raw_interfaces.items():
-            if not key in allowed_interfaces:
+            if not key in ALLOWED_INTERFACES:
                 continue
             for interface in interface_group:
                 interface_dic = {}
